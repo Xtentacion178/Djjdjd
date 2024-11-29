@@ -1005,45 +1005,57 @@ function redzLib:MakeWindow(Configs)
       end
       return Label
     end
-local Frame = Create("Frame", Container, {
-    Size = UDim2.new(1, 0, 0, 100), -- Ajuste a altura para acomodar a imagem e o texto
-    BackgroundColor3 = Color3.fromRGB(40, 40, 40),
-    BorderSizePixel = 0
-})
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
 
-local ProfileImage = Create("ImageLabel", Frame, {
-    Size = UDim2.new(0, 50, 0, 50),
-    Position = UDim2.new(0.5, -25, 0, 5),
-    BackgroundTransparency = 1,
-    Image = "rbxthumb://type=AvatarHeadShot&id=" .. LocalPlayer.UserId .. "&w=420&h=420" -- URL do perfil do jogador
-})
-
-local PlayerName = Create("TextLabel", Frame, {
-    Size = UDim2.new(1, 0, 0, 20),
-    Position = UDim2.new(0, 0, 0, 60),
-    BackgroundTransparency = 1,
-    Text = LocalPlayer.DisplayName,
-    TextColor3 = Color3.fromRGB(255, 255, 255),
-    TextScaled = true,
-    Font = Enum.Font.Gotham
-})
-
-local TimeLabel = Create("TextLabel", Frame, {
-    Size = UDim2.new(1, 0, 0, 20),
-    Position = UDim2.new(0, 0, 0, 80),
-    BackgroundTransparency = 1,
-    Text = "",
-    TextColor3 = Color3.fromRGB(200, 200, 200),
-    TextScaled = true,
-    Font = Enum.Font.Gotham
-})
-
-task.spawn(function()
-    while true do
-        TimeLabel.Text = os.date("%H:%M:%S") -- Atualiza o horário
-        task.wait(1)
+function MakeTab(Container)
+    if not LocalPlayer then
+        warn("LocalPlayer não está disponível")
+        return
     end
-end)
+
+    local Frame = Create("Frame", Container, {
+        Size = UDim2.new(1, 0, 0, 100), -- Ajuste a altura para acomodar a imagem e o texto
+        BackgroundColor3 = Color3.fromRGB(40, 40, 40),
+        BorderSizePixel = 0
+    })
+
+    local ProfileImage = Create("ImageLabel", Frame, {
+        Size = UDim2.new(0, 50, 0, 50),
+        Position = UDim2.new(0.5, -25, 0, 5),
+        BackgroundTransparency = 1,
+        Image = "rbxthumb://type=AvatarHeadShot&id=" .. tostring(LocalPlayer.UserId) .. "&w=420&h=420"
+    })
+
+    local PlayerName = Create("TextLabel", Frame, {
+        Size = UDim2.new(1, 0, 0, 20),
+        Position = UDim2.new(0, 0, 0, 60),
+        BackgroundTransparency = 1,
+        Text = LocalPlayer.DisplayName,
+        TextColor3 = Color3.fromRGB(255, 255, 255),
+        TextScaled = true,
+        Font = Enum.Font.Gotham
+    })
+
+    local TimeLabel = Create("TextLabel", Frame, {
+        Size = UDim2.new(1, 0, 0, 20),
+        Position = UDim2.new(0, 0, 0, 80),
+        BackgroundTransparency = 1,
+        Text = "",
+        TextColor3 = Color3.fromRGB(200, 200, 200),
+        TextScaled = true,
+        Font = Enum.Font.Gotham
+    })
+
+    task.spawn(function()
+        while true do
+            TimeLabel.Text = os.date("%H:%M:%S") -- Atualiza o horário
+            task.wait(1)
+        end
+    end)
+
+    return Frame
+end
     function Tab:AddParagraph(Configs)
       local ParagraphName1 = Configs[1] or Configs.Name or "Paragraph!!"
       local ParagraphName2 = Configs[2] or Configs.Text or "This is a Paragraph"
